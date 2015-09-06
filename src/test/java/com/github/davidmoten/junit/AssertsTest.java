@@ -29,4 +29,9 @@ public class AssertsTest {
         Asserts.assertIsUtilityClass(UtilityClassExample.class);
     }
 
+    @Test
+    public void testAssertsIsUtilityClass() {
+        Asserts.assertIsUtilityClass(Asserts.class);
+    }
+
 }

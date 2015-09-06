@@ -10,7 +10,27 @@ import java.lang.reflect.Modifier;
 /**
  * Utility methods for unit tests.
  */
-public class Asserts {
+public final class Asserts {
+
+    private Asserts() {
+        // prevent instantiation
+    }
+
+    /**
+     * Asserts that the given class is final, has a private constructor (which
+     * it calls for coverage purposes) and that the class only has static
+     * declared methods.
+     * 
+     * @param cls
+     *            the class to assert is a Utility class
+     * @throws AssertionException
+     *             if one of the assertions fails
+     */
+    public static void assertIsUtilityClass(Class<?> cls) {
+        assertFinal(cls);
+        assertConstructorIsPrivateAndCall(cls);
+        assertOnlyStaticMethods(cls);
+    }
 
     /**
      * Checks that a class has a no-argument private constructor and calls that
@@ -55,12 +75,6 @@ public class Asserts {
             if (!Modifier.isStatic(method.getModifiers()))
                 throw new AssertionError("method is not static: " + method.getName());
         }
-    }
-
-    public static void assertIsUtilityClass(Class<?> cls) {
-        assertFinal(cls);
-        assertConstructorIsPrivateAndCall(cls);
-        assertOnlyStaticMethods(cls);
     }
 
 }

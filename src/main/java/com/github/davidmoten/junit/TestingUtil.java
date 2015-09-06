@@ -8,15 +8,13 @@ import java.lang.reflect.Modifier;
 
 /**
  * Utility methods for unit tests.
- * 
- * @author dave
- * 
  */
 public class TestingUtil {
 
     /**
      * Checks that a class has a no-argument private constructor and calls that
-     * constructor to instantiate the class.
+     * constructor to instantiate the class (usually for code coverage
+     * purposes).
      * 
      * @param <T>
      *            type of class being checked

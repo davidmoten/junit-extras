@@ -4,12 +4,13 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 /**
  * Utility methods for unit tests.
  */
-public class TestingUtil {
+public class Asserts {
 
     /**
      * Checks that a class has a no-argument private constructor and calls that
@@ -21,8 +22,8 @@ public class TestingUtil {
      * @param cls
      *            class being checked
      */
-    public static <T> void callConstructorAndCheckIsPrivate(Class<T> cls) {
-        Constructor<T> constructor;
+    static void assertConstructorIsPrivateAndCall(Class<?> cls) {
+        Constructor<?> constructor;
         try {
             constructor = cls.getDeclaredConstructor();
         } catch (NoSuchMethodException e1) {
@@ -30,7 +31,7 @@ public class TestingUtil {
         } catch (SecurityException e1) {
             throw new RuntimeException(e1);
         }
-        assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+        assertTrue("constructor is not private", Modifier.isPrivate(constructor.getModifiers()));
         constructor.setAccessible(true);
         try {
             constructor.newInstance();
@@ -43,6 +44,23 @@ public class TestingUtil {
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    static void assertFinal(Class<?> cls) {
+        assertTrue("class is not final", Modifier.isFinal(cls.getModifiers()));
+    }
+
+    static void assertOnlyStaticMethods(Class<?> cls) {
+        for (Method method : cls.getDeclaredMethods()) {
+            if (!Modifier.isStatic(method.getModifiers()))
+                throw new AssertionError("method is not static: " + method.getName());
+        }
+    }
+
+    public static void assertIsUtilityClass(Class<?> cls) {
+        assertFinal(cls);
+        assertConstructorIsPrivateAndCall(cls);
+        assertOnlyStaticMethods(cls);
     }
 
 }

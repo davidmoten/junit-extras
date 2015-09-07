@@ -47,7 +47,7 @@ public final class Asserts {
         try {
             constructor = cls.getDeclaredConstructor();
         } catch (NoSuchMethodException e1) {
-            throw new RuntimeException(e1);
+            throw new RuntimeException("private constructor without arguments not found", e1);
         } catch (SecurityException e1) {
             throw new RuntimeException(e1);
         }

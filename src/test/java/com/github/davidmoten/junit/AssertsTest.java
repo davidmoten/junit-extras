@@ -19,6 +19,11 @@ public class AssertsTest {
         Asserts.assertConstructorIsPrivateAndCall(PrivateConstructor.class);
     }
 
+    @Test
+    public void testPrivateConstructorThrowIsIgnored() {
+        Asserts.assertConstructorIsPrivateAndCall(PrivateConstructorThrows.class);
+    }
+
     @Test(expected = AssertionError.class)
     public void testNonPrivateConstructor() {
         Asserts.assertConstructorIsPrivateAndCall(NonPrivateConstructor.class);

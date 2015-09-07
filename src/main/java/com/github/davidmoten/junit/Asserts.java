@@ -62,7 +62,7 @@ public final class Asserts {
         } catch (IllegalArgumentException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
+            // don't care if constructor threw an exception!
         }
     }
 

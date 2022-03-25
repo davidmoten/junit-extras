@@ -19,7 +19,7 @@ jobs:
       - name: print env vars and event payload
         uses: hmarr/debug-action@v2.0.1
         id: print
-      - if: ${{ github.event.workflow_run.conclusion == 'success' }}
+      - if: ${{ github.event.workflow_run.conclusion == 'success' && !contains(github.event.workflow_run.message, 'maven-plugin-api')}}
         name: auto-merge
         uses: ridedott/merge-me-action@v2
         with:

@@ -1,26 +1,23 @@
-name: auto-merge 
-
-on:
-  workflow_run:
-    types:
-      - completed
-    workflows:
-      - 'ci'
+name: Dependabot auto-merge
+on: pull_request
 
 permissions:
   pull-requests: write
   contents: write
 
 jobs:
-  auto-merge:
-    name: auto-merge-dependabot
+  dependabot:
     runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
-      - name: print env vars and event payload
-        uses: hmarr/debug-action@v2.0.1
-        id: print
-      - if: ${{ github.event.workflow_run.conclusion == 'success' && !contains(github.event.workflow_run.message, 'maven-plugin-api')}}
-        name: auto-merge
-        uses: ridedott/merge-me-action@v2
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v1.1.1
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Enable auto-merge for Dependabot PRs
+        if: ${{!contains(steps.metadata.outputs.dependency-names, 'maven-plugin-api') && steps.metadata.outputs.update-type == 'version-update:semver-minor'}}
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
